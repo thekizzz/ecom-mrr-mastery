@@ -2,7 +2,7 @@
 
 Ghi chú học tập cá nhân, **đã mã hoá**. Repo này chỉ chứa bản mã, không chứa nội dung dạng chữ thường.
 
-Mở tại: **https://thekizzz.github.io/ecom-mrr-sotay/**
+Mở tại: **https://thekizzz.github.io/ecom-mrr-mastery/**
 
 Cần mật khẩu để mở. Không có mật khẩu thì mọi file ở đây chỉ là chuỗi base64 vô nghĩa.
 
