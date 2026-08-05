@@ -587,7 +587,7 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
   var fade = 0, fadeWant = 0;    // 0..1 — chuột đã vào trang chưa
   var emitX = -300, emitY = -300;
   var bits = [];
-  var MAX = 190;
+  var MAX = 140;
   var running = false, last = 0;
 
   // Cây đũa là con trỏ, nên giấu con trỏ hệ thống đi — nếu không thì mũi tên
@@ -611,15 +611,15 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
     if (bits.length >= MAX) return;
     var star = Math.random() < 0.24;
     bits.push({
-      x: x + (Math.random() - 0.5) * 10,
-      y: y + (Math.random() - 0.5) * 10,
+      x: x + (Math.random() - 0.5) * 8,
+      y: y + (Math.random() - 0.5) * 8,
       // Một phần đà của chuột, phần còn lại là ngẫu nhiên: vẩy tay nhanh thì
       // bụi văng theo, để yên thì nó chỉ lơ lửng tại chỗ.
       vx: (Math.random() - 0.5) * 26 + vx * 0.05,
       vy: (Math.random() - 0.5) * 26 + vy * 0.05 - 8,
       age: 0,
       ttl: 0.65 + Math.random() * 0.85,
-      size: star ? 7 + Math.random() * 8 : 3 + Math.random() * 6,
+      size: star ? 5 + Math.random() * 6 : 2.4 + Math.random() * 4.4,
       rot: Math.random() * 6.28,
       spin: (Math.random() - 0.5) * 3.4,
       art: (star ? stars : dots)[(Math.random() * PALETTE.length) | 0]
@@ -633,9 +633,9 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
     return ((a + Math.PI) % 6.2832 + 6.2832) % 6.2832 - Math.PI;
   }
 
-  // Dài 54: ở 68 cây đũa lấn quá nhiều vào chỗ đang đọc, nhất là khi cán quét
-  // xuống ngang một dòng chữ. Nhỏ lại thì nó là con trỏ, không phải một món đồ.
-  var LEN = 54;
+  // Dài 38: ở 54 cán đũa vẫn quét ngang dòng chữ đang đọc và che mất chỗ vừa
+  // trỏ tới. Ngắn lại thì cả cây nằm gọn cạnh đầu trỏ — trỏ đâu thấy đó.
+  var LEN = 38;
 
   function wand(alpha) {
     if (alpha < 0.02) return;
@@ -657,7 +657,7 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
     ctx.globalAlpha = alpha;
 
     // Thân: gỗ sẫm, thon dần về đầu. Đầu đũa để sáng lên như vừa bị đốt.
-    seg(0, 1, 0.9, 3.4);
+    seg(0, 1, 0.7, 2.4);
     var grad = ctx.createLinearGradient(px, py,
                                         px + cos * LEN, py + sin * LEN);
     grad.addColorStop(0, 'rgb(' + BRIGHT + ')');
@@ -667,16 +667,16 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
     ctx.fillStyle = grad;
     ctx.fill();
     // Viền vàng mảnh: nền trang cũng đen, không có viền thì cây đũa lẫn vào.
-    ctx.strokeStyle = 'rgba(' + GOLD + ',.5)';
-    ctx.lineWidth = 0.7;
+    ctx.strokeStyle = 'rgba(' + GOLD + ',.66)';
+    ctx.lineWidth = 0.6;
     ctx.stroke();
 
     // Đai vàng chỗ tay cầm, và núm ở đuôi — hai chi tiết này mới đọc ra "cây
     // đũa" thay vì "một cái que".
     ctx.fillStyle = 'rgba(' + GOLD + ',' + (0.82 + lift * 0.18) + ')';
-    seg(0.56, 0.65, 2.7, 3.0); ctx.fill();
+    seg(0.55, 0.66, 1.9, 2.1); ctx.fill();
     ctx.beginPath();
-    ctx.arc(px + cos * LEN, py + sin * LEN, 3.5, 0, 6.2832);
+    ctx.arc(px + cos * LEN, py + sin * LEN, 2.5, 0, 6.2832);
     ctx.fill();
     ctx.globalAlpha = 1;
   }
@@ -708,7 +708,7 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
     // chứ không thành vệt đục.
     ctx.globalCompositeOperation = 'lighter';
 
-    var r = (34 + lift * 25);       // thu theo đũa, không thì quầng át cả đũa
+    var r = (23 + lift * 15);       // thu theo đũa, không thì quầng át cả đũa
     ctx.globalAlpha = (0.5 + lift * 0.3) * fade;
     ctx.drawImage(halo, px - r, py - r, r * 2, r * 2);
 
@@ -741,7 +741,7 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
 
     // Đầu đũa sáng vẽ sau cùng, lại cộng sáng, để nó nằm trên cả thân đũa.
     ctx.globalCompositeOperation = 'lighter';
-    var t = 7.5 + lift * 4;
+    var t = 5.2 + lift * 2.8;
     ctx.globalAlpha = (0.85 + lift * 0.15) * fade;
     ctx.drawImage(dots[0], px - t, py - t, t * 2, t * 2);
 
@@ -807,7 +807,7 @@ stroke-width="1.4"/></svg>') 10 10, pointer;
   // Bấm chuột = một nhúm bụi bật ra, để cú bấm có phản hồi ngoài chính cái nút.
   document.addEventListener('pointerdown', function (e) {
     if (e.pointerType && e.pointerType !== 'mouse') return;
-    for (var i = 0; i < 12; i++) spawn(e.clientX, e.clientY);
+    for (var i = 0; i < 9; i++) spawn(e.clientX, e.clientY);
     wake();
   }, { passive: true });
 })();
